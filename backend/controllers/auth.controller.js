@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 const login = async (req, res) => {
   try {
@@ -35,6 +36,7 @@ const signup = async (req, res) => {
       profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
     });
 
+    generateTokenAndSetCookie(newUser._id, res);
     await newUser.save();
 
     res.status(201).json({
