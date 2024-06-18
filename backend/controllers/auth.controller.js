@@ -1,16 +1,39 @@
 import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
+import bcrypt from "bcryptjs";
 
 const login = async (req, res) => {
   try {
-    const {} = req.body;
-    res.send("Login");
-  } catch (error) {}
+    const { username, password } = req.body;
+    const user = await User.findOne({ username: username });
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      user?.password || ""
+    );
+    if (!user || !isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid Username or Password" });
+    }
+
+    generateTokenAndSetCookie(user._id, res);
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      username: user.username,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.log("Error in Login Controller due to ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 const logout = async (req, res) => {
   try {
-    const {} = req.body;
-  } catch (error) {}
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.log("Error in Signup Controller due to ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 const signup = async (req, res) => {
   try {
@@ -24,6 +47,8 @@ const signup = async (req, res) => {
     if (user) {
       return res.status(400).json({ error: "Username already exists" });
     }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const girlProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
@@ -31,7 +56,7 @@ const signup = async (req, res) => {
     const newUser = new User({
       fullName,
       username,
-      password,
+      password: hashedPassword,
       gender,
       profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
     });
