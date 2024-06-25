@@ -27,7 +27,7 @@ export const sendMessage = async (req, res) => {
 
     //SOCKET.IO NOT ADDED YET
 
-    await Promise.all(conversation.save(), newMessage.save());
+    await Promise.all([conversation.save(), newMessage.save()]);
     res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage Controller due to ", error);
