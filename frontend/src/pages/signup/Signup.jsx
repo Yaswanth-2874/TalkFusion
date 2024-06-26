@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import useSignup from "../../hooks/UseSignup";
 
 const SignUp = () => {
-  const {loading, signup} = useSignup();
+  const { loading, signup } = useSignup();
   const [inputs, setInputs] = useState({
     fullName: "",
     username: "",
@@ -103,9 +103,13 @@ const SignUp = () => {
           <div>
             <button
               className="btn btn-block btn-sm mt-2 border border-slate-700"
-              type="submit"
+              disabled={loading}
             >
-              Sign Up
+              {loading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </div>
         </form>
