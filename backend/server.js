@@ -5,8 +5,8 @@ import establishMongoConnection from "./db/establishMongoConnection.js";
 import messageRoutes from "./routes/message.routes.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.routes.js";
+import { app, server } from "./socket/socket.js";
 
-const app = express();
 const port = process.env.port || 5000;
 
 dotenv.config();
@@ -17,7 +17,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoute);
 
-app.listen(port, () => {
+server.listen(port, () => {
   establishMongoConnection();
   console.log(`Listening on port ${port}`);
 });
