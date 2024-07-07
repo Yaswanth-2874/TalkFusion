@@ -6,9 +6,8 @@ Talk Fusion is a full-stack web application developed using the MERN stack, feat
 
 - **Frontend:**
   - React
-  - Redux (optional, if used)
   - TailwindCSS
-  - Daisy UI (optional, if used)
+  - Daisy UI
   - Socket.io-client
 
 - **Backend:**
@@ -17,7 +16,6 @@ Talk Fusion is a full-stack web application developed using the MERN stack, feat
   - MongoDB
   - Socket.io
   - JWT for authentication
-  - Node-cache (optional, if used)
 
 ## Key Features
 
